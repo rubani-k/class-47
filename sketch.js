@@ -24,17 +24,17 @@ function setup(){
   road1 = createSprite(windowWidth,325,600,100);
   road1.addImage(roadImg);
   road1.scale = 2;
-  road1.velocityX = 10;
+  //road1.velocityX = 10;
 
   road2 = createSprite(windowWidth, 625, 600,100);
   road2.addImage(roadImg);
   road2.scale = 2;
-  road2.velocityX = 10;
+  //road2.velocityX = 10;
 
   road3 = createSprite(windowWidth,925 , 600, 100);
   road3.addImage(roadImg);
   road3.scale = 1.9;
-  road3.velocityX = 10;
+  //road3.velocityX = 10;
 
   player = createSprite(windowWidth/2, windowHeight - 30, 100, 50);
   player.addAnimation ("walking", playerImg);
@@ -57,60 +57,70 @@ function setup(){
 function draw(){
  background("white");
 
+ if(gameState = START)
+ {
+   road1.velocityX = 0;
+   road2.velocityX = 0;
+   road3.velocityX = 0;
+ }
  if(keyDown("space"))
  {
    gameState = PLAY;
    console.log("playing");
  }
 
- if(gameState === PLAY);
- {
- if(keyDown(RIGHT_ARROW))
- {
-   player.x += 5;
- }
+ if(gameState === PLAY)
+  {    
+    road1.velocityX = 10;
+    road2.velocityX = 10;
+    road3.velocityX = 10;
 
- if(keyDown(LEFT_ARROW))
- {
-   player.x -= 5;
- }
+    if(keyDown(RIGHT_ARROW))
+    {
+     player.x += 5;
+    }
 
- if(keyDown(UP_ARROW))
- {
-   player.y -= 5;
- }
+    if(keyDown(LEFT_ARROW))
+    {
+      player.x -= 5;
+    }
 
- if(keyDown(DOWN_ARROW))
- {
-   player.y += 5;
- }
+   if(keyDown(UP_ARROW))
+    {
+     player.y -= 5;
+    }
 
- if(road1.x > 1600 )
-  {
-     road1.x = windowWidth /3;
-     console.log("l")
-  }
+    if(keyDown(DOWN_ARROW))
+    {
+       player.y += 5;
+     }
 
-  if(road2.x > 1600)
-  {
-     road2.x = width /2;
-  }
+    if(road1.x > 1600 )
+     {
+      road1.x = windowWidth /3;
+       console.log("l")
+     }
 
-  if(road3.x > 1500)
-  {
+      if(road2.x > 1600)
+      {
+       road2.x = width /2;
+     }
+
+    if(road3.x > 1500)
+    {
      road3.x = width /2;
-  }
+    }
 
-  spawnTrees();
-  spawnMotorcycles();
-  spawnCars();
-  spawnTrucks();
-  drawSprites();
-  //console.log(windowWidth)
-  //console.log(road1.width)
-  //console.log(pavementImg.width)
-  //console.log(roadImg.height)
-}
+    spawnTrees();
+    spawnMotorcycles();
+    spawnCars();
+    spawnTrucks();
+    //console.log(windowWidth)
+    //console.log(road1.width)
+    //console.log(pavementImg.width)
+    //console.log(roadImg.height)
+    }
+  drawSprites()
 }
 
 function createPaving(y)
@@ -207,5 +217,32 @@ function spawnTrucks()
     truck.scale = 0.3;
     truck.lifetime = 200;
     truckGroup.add(truck);
+  }
+}
+
+function collided()
+{
+  if(motorcycleGroup.isTouching(player))
+  {
+    gameState = END;
+    console.log("motorcycle");
+  }
+
+  if(carGroup.isTouching(player))
+  {
+    gameState = END;
+    console.log("car");
+  }
+
+  if(treeGroup.isTouching(player))
+  {
+    gameState = END;
+    console.log("tree")
+  }
+
+  if(truckGroup.isTouching(player))
+  {
+    gameState = END;
+    console.log("truck");
   }
 }
